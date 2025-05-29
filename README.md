@@ -1,6 +1,17 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Dice Roller Mobile App
 
-# Getting Started
+A React Native mobile application for rolling different types of dice (d4, d6, d8, d10, d12, d20, d100).
+
+## Features
+
+- Roll various types of dice (d4, d6, d8, d10, d12, d20, d100)
+- Animated dice rolls with visual feedback
+- Haptic feedback when rolling dice
+- Sound effects (simulated)
+- Roll history to track your previous rolls
+- Clean, intuitive user interface
+
+## Getting Started
 
 > **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
 
@@ -73,18 +84,34 @@ When you want to forcefully reload, for example to reset the state of your app, 
 - **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
 - **iOS**: Press <kbd>R</kbd> in iOS Simulator.
 
-## Congratulations! :tada:
+## Using the Dice Roller App
 
-You've successfully run and modified your React Native App. :partying_face:
+1. Select a die type by tapping on one of the dice options at the bottom (D4, D6, D8, etc.)
+2. Tap the "ROLL!" button to roll the selected die
+3. The result will be displayed in the center of the screen
+4. Your roll history will be shown at the bottom of the screen
 
-### Now what?
+## App Structure
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+- `App.tsx` - Main application entry point
+- `src/components/DiceRollerClean.tsx` - Main dice roller component
+- `src/components/DiceDisplay.tsx` - Dice display component 
+- `src/utils/diceUtils.ts` - Utility functions for dice rolling
+- `src/utils/SoundEffects.ts` - Sound effects handling
+- `src/config/AppSettings.ts` - Application settings
 
-# Troubleshooting
+## Future Enhancements
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+- Multiple dice rolls at once
+- Custom dice faces
+- Saving favorite dice combinations
+- Dark mode support
+- Actual sound effects implementation
+- Customizable dice colors
+
+## Troubleshooting
+
+If you're having issues getting the app to work, see the [React Native Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
 
 # Learn More
 

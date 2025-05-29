@@ -1,5 +1,5 @@
 /**
- * Dice Roller App
+ * Dice Roller App - Main Application
  *
  * @format
  */
@@ -9,19 +9,21 @@ import {
   SafeAreaView,
   StatusBar,
   StyleSheet,
-  useColorScheme,
   View,
   TouchableOpacity,
   Text,
   Modal,
+  ActivityIndicator,
 } from 'react-native';
 
 import DiceRoller from './src/components/DiceRollerComplete';
 import SplashScreen from './src/components/SplashScreen';
 import MultipleDiceRoller from './src/components/MultipleDiceRoller';
 import SettingsScreen from './src/components/SettingsScreen';
-import { AppSettings } from './src/config/AppSettings';
+import { ThemeProvider, useTheme } from './src/utils/ThemeContext';
 import SoundEffects from './src/utils/SoundEffects';
+import HapticFeedback from './src/utils/HapticFeedback';
+import Storage from './src/utils/storageClean';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -32,22 +34,16 @@ function App(): React.JSX.Element {
   const [selectedDiceType, setSelectedDiceType] = useState({ sides: 20, color: '#607D8B' });
 
   // Hide splash screen after a delay
-  useEffect(() => {
-    // In a real app, you might want to load resources here
-  }, []);
-
   const handleSplashFinished = () => {
     setShowingSplash(false);
   };
 
+  // Handle settings change
   const handleSettingsChange = (newSettings: any) => {
     setAppSettings({ ...appSettings, ...newSettings });
   };
 
-  const handleDiceSelection = (sides: number, color: string) => {
-    setSelectedDiceType({ sides, color });
-  };
-
+  // Render splash screen if needed
   if (showingSplash) {
     return <SplashScreen onFinish={handleSplashFinished} />;
   }
