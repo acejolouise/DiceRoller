@@ -30,18 +30,18 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ settings: initialSettin
   
   // Available history limit options
   const historyOptions = [10, 20, 50, 100];
-
   // Update a specific setting
   const updateSetting = (key: string, value: any) => {
-    const newSettings = { ...settings, [key]: value };
-    setSettings(newSettings);
+    const newSettings = { ...localSettings, [key]: value };
+    setLocalSettings(newSettings);
     onSettingsChange(newSettings);
   };
 
   // Save settings and close
   const saveSettings = () => {
     // In a real app, we would persist these settings
-    console.log('Saving settings:', settings);
+    console.log('Saving settings:', localSettings);
+    onSettingsChange(localSettings);
     onClose();
   };
 

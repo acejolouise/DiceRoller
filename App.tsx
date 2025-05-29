@@ -16,24 +16,34 @@ import {
   Modal,
 } from 'react-native';
 
-import DiceRoller from './src/components/DiceRollerComplete';
+import DiceRoller from './src/components/DiceRollerCompleteUpdated';
 import SplashScreen from './src/components/SplashScreen';
 import MultipleDiceRoller from './src/components/MultipleDiceRoller';
 import SettingsScreen from './src/components/SettingsScreen';
 import { AppSettings } from './src/config/AppSettings';
 import SoundEffects from './src/utils/SoundEffects';
+import { ThemeProvider } from './src/utils/ThemeContext';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   const [showingSplash, setShowingSplash] = useState(true);
   const [activeScreen, setActiveScreen] = useState<'single' | 'multiple'>('single');
   const [showSettings, setShowSettings] = useState(false);
-  const [appSettings, setAppSettings] = useState(AppSettings.defaults);
-  const [selectedDiceType, setSelectedDiceType] = useState({ sides: 20, color: '#607D8B' });
+  const [appSettings, setAppSettings] = useState<any>({
+    ...AppSettings.defaults,
+    defaultDice: 'D20',
+    soundEnabled: true,
+    hapticEnabled: true,
+    maxHistory: 20,
+    darkMode: false,
+  });
 
-  // Hide splash screen after a delay
+  // Initialize app resources
   useEffect(() => {
-    // In a real app, you might want to load resources here
+    SoundEffects.initialize();
+    return () => {
+      SoundEffects.release();
+    };
   }, []);
 
   const handleSplashFinished = () => {
@@ -44,89 +54,83 @@ function App(): React.JSX.Element {
     setAppSettings({ ...appSettings, ...newSettings });
   };
 
-  const handleDiceSelection = (sides: number, color: string) => {
-    setSelectedDiceType({ sides, color });
-  };
-
   if (showingSplash) {
     return <SplashScreen onFinish={handleSplashFinished} />;
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={isDarkMode ? '#000' : '#fff'}
-      />
-      
-      {/* Main Content */}
-      <View style={styles.content}>
-        {activeScreen === 'single' ? (
-          <DiceRoller />
-        ) : (
-          <MultipleDiceRoller 
-            diceType={selectedDiceType.sides} 
-            color={selectedDiceType.color} 
-          />
-        )}
-      </View>
-      
-      {/* Tab Navigation */}
-      <View style={styles.tabBar}>
-        <TouchableOpacity
-          style={[
-            styles.tab,
-            activeScreen === 'single' && styles.activeTab,
-          ]}
-          onPress={() => setActiveScreen('single')}
-        >
-          <Text
-            style={[
-              styles.tabText,
-              activeScreen === 'single' && styles.activeTabText,
-            ]}
-          >
-            Single Die
-          </Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity
-          style={[
-            styles.tab,
-            activeScreen === 'multiple' && styles.activeTab,
-          ]}
-          onPress={() => setActiveScreen('multiple')}
-        >
-          <Text
-            style={[
-              styles.tabText,
-              activeScreen === 'multiple' && styles.activeTabText,
-            ]}
-          >
-            Multiple Dice
-          </Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity
-          style={styles.settingsTab}
-          onPress={() => setShowSettings(true)}
-        >
-          <Text style={styles.settingsText}>⚙️</Text>
-        </TouchableOpacity>
-      </View>
-      
-      {/* Settings Modal */}
-      <Modal
-        visible={showSettings}
-        animationType="slide"
-        transparent={false}
-      >
-        <SettingsScreen
-          onClose={() => setShowSettings(false)}
-          onSettingsChange={handleSettingsChange}
+    <ThemeProvider>
+      <SafeAreaView style={styles.container}>
+        <StatusBar
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          backgroundColor={isDarkMode ? '#000' : '#fff'}
         />
-      </Modal>
-    </SafeAreaView>
+        <View style={styles.content}>
+          {activeScreen === 'single' ? (
+            <DiceRoller
+              settings={appSettings}
+              onSettingsChange={handleSettingsChange}
+            />
+          ) : (
+            <MultipleDiceRoller
+              settings={appSettings}
+              onSettingsChange={handleSettingsChange}
+            />
+          )}
+        </View>
+        <View style={styles.tabBar}>
+          <TouchableOpacity
+            style={[
+              styles.tab,
+              activeScreen === 'single' && styles.activeTab,
+            ]}
+            onPress={() => setActiveScreen('single')}
+          >
+            <Text
+              style={[
+                styles.tabText,
+                activeScreen === 'single' && styles.activeTabText,
+              ]}
+            >
+              Single Die
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.tab,
+              activeScreen === 'multiple' && styles.activeTab,
+            ]}
+            onPress={() => setActiveScreen('multiple')}
+          >
+            <Text
+              style={[
+                styles.tabText,
+                activeScreen === 'multiple' && styles.activeTabText,
+              ]}
+            >
+              Multiple Dice
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.settingsTab}
+            onPress={() => setShowSettings(true)}
+          >
+            <Text style={styles.settingsText}>⚙️</Text>
+          </TouchableOpacity>
+        </View>
+        <Modal
+          visible={showSettings}
+          animationType="slide"
+          transparent={false}
+        >
+          <SettingsScreen
+            settings={appSettings}
+            onClose={() => setShowSettings(false)}
+            onSettingsChange={handleSettingsChange}
+          />
+        </Modal>
+      </SafeAreaView>
+    </ThemeProvider>
   );
 }
 
@@ -152,14 +156,14 @@ const styles = StyleSheet.create({
   },
   activeTab: {
     borderTopWidth: 2,
-    borderTopColor: AppSettings.theme.primaryColor,
+    borderTopColor: AppSettings.theme.light.primaryColor,
   },
   tabText: {
     fontSize: 14,
     color: '#666',
   },
   activeTabText: {
-    color: AppSettings.theme.primaryColor,
+    color: AppSettings.theme.light.primaryColor,
     fontWeight: 'bold',
   },
   settingsTab: {

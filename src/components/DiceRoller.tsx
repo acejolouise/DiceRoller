@@ -22,18 +22,11 @@ interface DiceType {
 }
 
 const DiceRoller: React.FC = () => {
-  const [result, setResult] = useState<number | null>(null);  const [selectedDice, setSelectedDice] = useState<DiceType>({ name: 'D20', sides: 20, color: '#607D8B' });
+  const [result, setResult] = useState<number | null>(null);
+  const [selectedDice, setSelectedDice] = useState<DiceType>({ name: 'D20', sides: 20, color: '#607D8B' });
   const [rollHistory, setRollHistory] = useState<{ dice: string; result: number; timestamp: Date }[]>([]);
   const [rollAnim] = useState(new Animated.Value(0));
   const [isRolling, setIsRolling] = useState(false);
-    // Set the default dice based on app settings
-  useEffect(() => {
-    const defaultDiceType = AppSettings.defaults.defaultDice;
-    const defaultDice = diceTypes.find(dice => dice.name === defaultDiceType);
-    if (defaultDice) {
-      setSelectedDice(defaultDice);
-    }
-  }, [diceTypes]);
   
   // Define dice types
   const diceTypes: DiceType[] = [
@@ -44,7 +37,16 @@ const DiceRoller: React.FC = () => {
     { name: 'D12', sides: 12, color: '#FF9800' },
     { name: 'D20', sides: 20, color: '#607D8B' },
     { name: 'D100', sides: 100, color: '#795548' },
-  ];  const handleDiceRoll = () => {
+  ];
+  
+  // Set the default dice based on app settings
+  useEffect(() => {
+    const defaultDiceType = AppSettings.defaults.defaultDice;
+    const defaultDice = diceTypes.find(dice => dice.name === defaultDiceType);
+    if (defaultDice) {
+      setSelectedDice(defaultDice);
+    }
+  }, []);const handleDiceRoll = () => {
     // Don't allow rolling while animation is in progress
     if (isRolling) {
       return;

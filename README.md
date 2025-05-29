@@ -7,7 +7,7 @@ A React Native mobile application for rolling different types of dice (d4, d6, d
 - Roll various types of dice (d4, d6, d8, d10, d12, d20, d100)
 - Animated dice rolls with visual feedback
 - Haptic feedback when rolling dice
-- Sound effects (simulated)
+- Sound effects (simulated)nop
 - Roll history to track your previous rolls
 - Clean, intuitive user interface
 

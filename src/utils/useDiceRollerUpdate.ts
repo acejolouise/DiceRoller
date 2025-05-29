@@ -18,13 +18,12 @@ export const useDiceRoller = (initialDiceType: DiceType) => {
   const [selectedDice, setSelectedDice] = useState<DiceType>(initialDiceType);
   const [rollHistory, setRollHistory] = useState<RollHistoryEntry[]>([]);
   const [rollAnim] = useState(new Animated.Value(0));
-  const [isRolling, setIsRolling] = useState(false);
-  const [settings, setSettings] = useState<AppSettingsStorage>({
+  const [isRolling, setIsRolling] = useState(false);  const [settings, setSettings] = useState<AppSettingsStorage>({
     defaultDice: AppSettings.defaults.defaultDice,
     soundEnabled: AppSettings.defaults.soundEnabled,
     hapticEnabled: AppSettings.defaults.hapticEnabled,
     maxHistory: AppSettings.defaults.maxHistory,
-    darkMode: false
+    darkMode: false,
   });
 
   // Define all available dice types

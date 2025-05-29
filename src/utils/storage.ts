@@ -13,7 +13,7 @@ export interface RollHistoryEntry {
   dice: string;
   result: number;
   timestamp: Date;
-  multiple?: boolean; 
+  multiple?: boolean;
   count?: number;
 }
 
@@ -60,13 +60,12 @@ export const Storage = {
   async loadSettings(): Promise<AppSettingsStorage> {
     try {
       const savedSettings = await AsyncStorage.getItem(STORAGE_KEYS.SETTINGS);
-      
-      const defaultSettings: AppSettingsStorage = {
+        const defaultSettings: AppSettingsStorage = {
         defaultDice: AppSettings.defaults.defaultDice,
         soundEnabled: AppSettings.defaults.soundEnabled,
         hapticEnabled: AppSettings.defaults.hapticEnabled,
         maxHistory: AppSettings.defaults.maxHistory,
-        darkMode: false
+        darkMode: false,
       };
       
       if (!savedSettings) {
@@ -75,13 +74,12 @@ export const Storage = {
       
       return { ...defaultSettings, ...JSON.parse(savedSettings) };
     } catch (error) {
-      console.error('Failed to load settings:', error);
-      return {
+      console.error('Failed to load settings:', error);      return {
         defaultDice: 'D20',
         soundEnabled: true,
         hapticEnabled: true,
         maxHistory: 20,
-        darkMode: false
+        darkMode: false,
       };
     }
   },
@@ -154,60 +152,7 @@ export const Storage = {
     } catch (error) {
       console.error('Failed to load theme:', error);
       return undefined;
-    }
-  }
-    try {
-      await AsyncStorage.setItem(
-        STORAGE_KEYS.ROLL_HISTORY,
-        JSON.stringify(history)
-      );
-    } catch (error) {
-      console.error('Failed to save roll history:', error);
-    }
-  },
-
-  /**
-   * Load roll history from AsyncStorage
-   * @returns The saved roll history or empty array if none exists
-   */
-  async loadRollHistory(): Promise<any[]> {
-    try {
-      const savedHistory = await AsyncStorage.getItem(STORAGE_KEYS.ROLL_HISTORY);
-      return savedHistory ? JSON.parse(savedHistory) : [];
-    } catch (error) {
-      console.error('Failed to load roll history:', error);
-      return [];
-    }
-  },
-
-  /**
-   * Save theme preference to AsyncStorage
-   * @param isDarkMode Whether dark mode is enabled
-   */
-  async saveThemePreference(isDarkMode: boolean): Promise<void> {
-    try {
-      await AsyncStorage.setItem(
-        STORAGE_KEYS.THEME,
-        JSON.stringify({ isDarkMode })
-      );
-    } catch (error) {
-      console.error('Failed to save theme preference:', error);
-    }
-  },
-
-  /**
-   * Load theme preference from AsyncStorage
-   * @returns The saved theme preference or undefined if none exists
-   */
-  async loadThemePreference(): Promise<{ isDarkMode: boolean } | undefined> {
-    try {
-      const savedTheme = await AsyncStorage.getItem(STORAGE_KEYS.THEME);
-      return savedTheme ? JSON.parse(savedTheme) : undefined;
-    } catch (error) {
-      console.error('Failed to load theme preference:', error);
-      return undefined;
-    }
-  },
+    }  },
 
   /**
    * Clear all saved data (for debugging or reset functionality)
@@ -218,11 +163,10 @@ export const Storage = {
         STORAGE_KEYS.SETTINGS,
         STORAGE_KEYS.ROLL_HISTORY,
         STORAGE_KEYS.THEME,
-      ]);
-    } catch (error) {
+      ]);    } catch (error) {
       console.error('Failed to clear data:', error);
     }
-  }
+  },
 };
 
 export default Storage;
